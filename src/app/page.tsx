@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { json } from "./json";
+import Loading from "@/app/component/Loading";
 
 export default function Home() {
 
   const [data, setData] = useState([{ id: 0, country: '', numberFlight: 0 }]);
   const [count, setCount] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [destination, setDestination] = useState('');
 
   useEffect(() => {
     setData([]);
@@ -15,11 +18,13 @@ export default function Home() {
 
   const fetchData = async (code: string) => {
     try {
+      setIsLoading(true);
       const response = await fetch(`https://api.flightapi.io/schedule/677df99369603e14ef2fba94?mode=arrivals&iata=${code}&day=1`);
       console.log(response);
 
       if (!response.ok) {
         window.alert(`HTTP error! Status: ${response.status}`);
+        setIsLoading(false);
         return;
       }
 
@@ -46,14 +51,21 @@ export default function Home() {
         }
       });
 
-      setData(dataRaw.sort((a, b) => a.numberFlight - b.numberFlight));
+      setData(dataRaw.sort((a, b) => b.numberFlight - a.numberFlight));
       setCount(dataRaw.length);
+      setDestination(result.airport.pluginData.details.name);
+      setIsLoading(false);
+
     } catch (error) {
       window.alert("There was a problem with the fetch operation")
+      setIsLoading(false);
+
     }
   };
 
   const fetDataLocal = () => {
+
+    setIsLoading(true);
 
     const dataResult = json.airport.pluginData.schedule.arrivals.data;
     var dataRaw: any[] = [];
@@ -78,11 +90,15 @@ export default function Home() {
 
     setData(dataRaw.sort((a, b) => b.numberFlight - a.numberFlight));
     setCount(dataRaw.length);
+    setDestination(json.airport.pluginData.details.name);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   }
 
   const handelSearch = async () => {
-    fetchData(document.getElementById("default-search")?.value);
-    // fetDataLocal();
+    // fetchData(document.getElementById("default-search")?.value);
+    fetDataLocal();
   }
 
   return (
@@ -105,33 +121,41 @@ export default function Home() {
           <button type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handelSearch}>Search</button>
         </div>
       </div>
-      <div className="relative overflow-x-auto">
-        <div className="mx-auto max-w-2xl px-4 py-4 sm:px-4 sm:py-4 lg:max-w-7xl lg:px-8">
-          <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl">
-            <label className="uppercase text-xs text-gray-700" htmlFor="table">{count} coutries</label>
-          </div> 
-          <table id={"table"}className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">Country</th>
-                <th scope="col" className="px-6 py-3"># of Flights</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                data.map((item, index) => (
+      {isLoading ? (
+      <div className="mx-auto max-w-2xl px-16 py-16 sm:px-16 sm:py-16 lg:max-w-7xl lg:px-8 flex justify-center">
+        <Loading />
+      </div>
+      ) : (
+      <>
+        <div className="relative overflow-x-auto">
+          <div className="mx-auto max-w-2xl px-4 py-4 sm:px-4 sm:py-4 lg:max-w-7xl lg:px-8">
+            <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl">
+              <label className="uppercase text-xs text-gray-700" htmlFor="table">{count} coutries</label>
+            </div>
+            <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl">
+              <p className="text-xl text-black">Table for {destination}:</p>
+            </div>
+            <table id={"table"} className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" className="px-6 py-3">Country</th>
+                  <th scope="col" className="px-6 py-3"># of Flights</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
                   <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {item.country}
                     </th>
                     <td className="px-6 py-4">{item.numberFlight}</td>
                   </tr>
-                ))
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div></>
+      )}
     </div>
   )
 }
