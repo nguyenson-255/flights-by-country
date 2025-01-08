@@ -95,7 +95,7 @@ export default function Home() {
   }
 
   const handelSearch = async () => {
-    fetchData(document.getElementById("default-search")?.value);
+    fetchData((document.getElementById("default-search") as HTMLInputElement).value);
     // fetDataLocal();
   }
 
