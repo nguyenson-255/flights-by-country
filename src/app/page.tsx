@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { json } from "./json";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
 
   const fetchData = async (code: string) => {
     try {
-      const response = await fetch(`https://api.flightapi.io/schedule/677df99369603e14ef2fba95?mode=arrivals&iata=${code}&day=1`);
+      const response = await fetch(`https://api.flightapi.io/schedule/677df99369603e14ef2fba94?mode=arrivals&iata=${code}&day=1`);
       console.log(response);
 
       if (!response.ok) {
@@ -81,8 +81,8 @@ export default function Home() {
   }
 
   const handelSearch = async () => {
-    // fetchData(document.getElementById("default-search")?.value);
-    fetDataLocal();
+    fetchData(document.getElementById("default-search")?.value);
+    // fetDataLocal();
   }
 
   return (
