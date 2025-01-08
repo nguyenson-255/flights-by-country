@@ -7,7 +7,7 @@ import Loading from "@/app/component/Loading";
 export default function Home() {
 
   const [data, setData] = useState([{ id: 0, country: '', numberFlight: 0 }]);
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [destination, setDestination] = useState('');
 
@@ -20,11 +20,10 @@ export default function Home() {
     try {
       setIsLoading(true);
       const response = await fetch(`https://api.flightapi.io/schedule/677df99369603e14ef2fba94?mode=arrivals&iata=${code}&day=1`);
-      console.log(response);
 
       if (!response.ok) {
-        window.alert(`HTTP error! Status: ${response.status}`);
         setIsLoading(false);
+        window.alert(`HTTP error! Status: ${response.status}`);
         return;
       }
 
@@ -57,9 +56,8 @@ export default function Home() {
       setIsLoading(false);
 
     } catch (error) {
-      window.alert("There was a problem with the fetch operation")
       setIsLoading(false);
-
+      window.alert("There was a problem with the fetch operation")
     }
   };
 
@@ -97,8 +95,8 @@ export default function Home() {
   }
 
   const handelSearch = async () => {
-    // fetchData(document.getElementById("default-search")?.value);
-    fetDataLocal();
+    fetchData(document.getElementById("default-search")?.value);
+    // fetDataLocal();
   }
 
   return (
@@ -129,10 +127,8 @@ export default function Home() {
       <>
         <div className="relative overflow-x-auto">
           <div className="mx-auto max-w-2xl px-4 py-4 sm:px-4 sm:py-4 lg:max-w-7xl lg:px-8">
-            <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl">
+            <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl flex flex-col gap-4">
               <label className="uppercase text-xs text-gray-700" htmlFor="table">{count} coutries</label>
-            </div>
-            <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl">
               <p className="text-xl text-black">Table for {destination}:</p>
             </div>
             <table id={"table"} className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
