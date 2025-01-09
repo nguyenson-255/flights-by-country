@@ -19,7 +19,7 @@ export default function Home() {
   const fetchData = async (code: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`https://api.flightapi.io/schedule/677df99369603e14ef2fba94?mode=arrivals&iata=${code}&day=1`);
+      const response = await fetch(`https://api.flightapi.io/schedule/677f2b153aed2814723d4a7e?mode=arrivals&iata=${code}&day=1`);
 
       if (!response.ok) {
         setIsLoading(false);
