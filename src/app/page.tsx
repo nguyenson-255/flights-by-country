@@ -101,12 +101,12 @@ export default function Home() {
 
   return (
     <div>
-      <div className="py-8 px-4 mx-auto max-w-md text-center lg:py-16">
+      <div className="py-8 px-4 mx-auto max-w-md text-center lg:py-16 lg:max-w-2xl" >
         <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
           Flights by Country
         </h1>
       </div>
-      <div className="mx-auto max-w-md">
+      <div className="mx-auto max-w-md lg:max-w-2xl">
         <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div className="relative">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -126,7 +126,7 @@ export default function Home() {
       ) : (
       <>
         <div className="relative overflow-x-auto">
-          <div className="mx-auto max-w-2xl px-4 py-4 sm:px-4 sm:py-4 lg:max-w-7xl lg:px-8">
+          <div className="mx-auto max-w-2xl px-4 py-4 sm:px-4 sm:py-4 lg:max-w-3xl lg:px-8">
             <div className="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl flex flex-col gap-4">
               <label className="uppercase text-xs text-gray-700" htmlFor="table">{count} coutries</label>
               <p className="text-xl text-black">Table for {destination}:</p>
